@@ -1,18 +1,19 @@
-import { useState, useEffect } from "react";
-import "../css/Note.css";
-import CreateNote from "./CreateNote";
-import Note from "./Note";
-import { v4 as uuid } from "uuid";
+import { useState, useEffect } from "react"
+import "../css/Note.css"
+import CreateNote from "./CreateNote"
+import Note from "./Note"
+import { v4 as uuid } from "uuid"
+import Draggable from "react-draggable"
 
 function Notes() {
   //states
-  const [notes, setNotes] = useState([]);
-  const [inputText, setInputText] = useState("");
+  const [notes, setNotes] = useState([])
+  const [inputText, setInputText] = useState("")
 
   // get text and store in state
   const textHandler = (e) => {
-    setInputText(e.target.value);
-  };
+    setInputText(e.target.value)
+  }
 
   // add new note to the state array
   const saveHandler = () => {
@@ -20,50 +21,58 @@ function Notes() {
       ...prevState,
       {
         id: uuid(),
-        text: inputText
-      }
-    ]);
+        text: inputText,
+      },
+    ])
     //clear the textarea
-    setInputText("");
-  };
+    setInputText("")
+  }
 
   //delete note function
   const deleteNote = (id) => {
-    const filteredNotes = notes.filter((note) => note.id !== id);
-    setNotes(filteredNotes);
-  };
+    const filteredNotes = notes.filter((note) => note.id !== id)
+    setNotes(filteredNotes)
+  }
 
   //apply the save and get functions using useEffect
   //get the saved notes and add them to the array
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("Notes"));
+    const data = JSON.parse(localStorage.getItem("Notes"))
     if (data) {
-      setNotes(data);
+      setNotes(data)
     }
-  }, []);
+  }, [])
 
   //saving data to local storage
   useEffect(() => {
-    localStorage.setItem("Notes", JSON.stringify(notes));
-  }, [notes]);
+    localStorage.setItem("Notes", JSON.stringify(notes))
+  }, [notes])
 
   return (
     <div className="notes">
       {notes.map((note) => (
-        <Note
-          key={note.id}
-          id={note.id}
-          text={note.text}
-          deleteNote={deleteNote}
-        />
+        <Draggable axis="both">
+          <div className="drag-wrapper" style={{ cursor: "move" }}>
+            <Note
+              key={note.id}
+              id={note.id}
+              text={note.text}
+              deleteNote={deleteNote}
+            />
+          </div>
+        </Draggable>
       ))}
-      <CreateNote
-        textHandler={textHandler}
-        saveHandler={saveHandler}
-        inputText={inputText}
-      />
+      <Draggable axis="both">
+        <div className="drag-wrapper" style={{ cursor: "move" }}>
+          <CreateNote
+            textHandler={textHandler}
+            saveHandler={saveHandler}
+            inputText={inputText}
+          />
+        </div>
+      </Draggable>
     </div>
-  );
+  )
 }
 
-export default Notes;
+export default Notes

@@ -7,19 +7,20 @@ function CreateNote({ textHandler, saveHandler, inputText }) {
     <div className="note" style={{ background: "rgba(255, 255, 255, 0)" }}>
       <textarea
         cols="10"
-        rows="5"
+        rows="8"
         value={inputText}
         placeholder="Type your note..."
         onChange={textHandler}
         maxLength="250"
       ></textarea>
       <div className="note__footer">
-        <span className="label">{charLeft} character left</span>
-        
+        <span className="label" style={{ fontSize: "13px" }}>
+          {charLeft} character left
+        </span>
+
         <button className="note__save" onClick={saveHandler}>
           Save
         </button>
-        
       </div>
       <LinearProgress
         className="char__progress"
